@@ -1,24 +1,27 @@
 import React from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Provider } from 'react-redux';
+
+import Navbar from './ui_palette/Navbar';
+import ListContent from './list';
+import DetailContent from './detail';
+
+import store from '../stores';
 
 import './App.css';
 
 function App() {
 	return (
-		<div className='App'>
-			<header className='App-header'>
-				<p>
-          Edit <code>src/App.js</code> and save to reload.
-				</p>
-				<a
-					className='App-link'
-					href='https://reactjs.org'
-					target='_blank'
-					rel='noopener noreferrer'
-				>
-          Learn React
-				</a>
-			</header>
-		</div>
+		<Provider store={store}>
+			<BrowserRouter>
+				<Switch>
+					<Navbar>
+						<Route exact path='/' component={ListContent} />
+						<Route exact path='/:slugId' component={DetailContent} />
+					</Navbar>
+				</Switch>
+			</BrowserRouter>
+		</Provider>
 	);
 }
 
