@@ -1,0 +1,43 @@
+article {
+  text-align: justify;
+  padding-bottom: 3rem;
+}
+
+@media only screen {
+  img {
+    width: calc(100% - 5rem);
+  }
+  
+  .display-4 {
+    font-size: calc(3.5rem - 1rem) !important;
+  }
+}
+
+div.read-also {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0 2.5rem;
+}
+
+div.read-also__image {
+  display: none;
+}
+
+div.read-also__text {
+  border: 1.2px solid #b5b5b5;
+  padding: 0.5rem;
+  width: -moz-fit-content;
+  box-shadow: 5px 7px #ccc;
+  width: fit-content;
+}
+
+div.multiapp-wrapper {
+  display: none;
+}
+
+button.scroll-top {
+  height: fit-content;
+  position: fixed;
+  bottom: 5rem;
+  right: 0;
+}
