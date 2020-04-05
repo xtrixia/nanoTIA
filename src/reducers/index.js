@@ -2,13 +2,21 @@ import { createActions, handleActions } from 'redux-actions';
 
 const initialState = {
 	data: [],
+	totalPage: 0,
+	currentPage: 1,
 	selectedData: null,
 	loading: false,
 	error: null,
 };
 
 export const {
-	actions: { requestList, requestDetail, succeedList, succeedDetail, failure },
+	actions: {
+		requestList,
+		requestDetail,
+		succeedList,
+		succeedDetail,
+		failure,
+	},
 } = createActions({
 	ACTIONS: {
 		REQUEST_LIST: (url) => url,
@@ -35,9 +43,11 @@ export default handleActions(
 			error: null,
 			loading: false,
 		}),
-		[succeedList]: (state, { payload: data }) => ({
+		[succeedList]: (state, { payload: list }) => ({
 			...state,
-			data,
+			data: state.data.concat(list.posts),
+			totalPage: list.total_pages,
+			currentPage: list.current_page,
 			error: null,
 			loading: false,
 		}),
