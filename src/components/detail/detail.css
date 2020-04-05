@@ -3,6 +3,11 @@ article {
   padding-bottom: 3rem;
 }
 
+img.banner {
+  width: 100% !important;
+  padding-bottom: 2rem;
+}
+
 @media only screen {
   img {
     width: calc(100% - 5rem);

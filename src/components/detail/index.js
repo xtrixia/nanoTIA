@@ -11,6 +11,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useParams, withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet';
 
 import ErrorIcon from '../../assets/ErrorIcon';
 import ArrowUpIcon from '../../assets/ArrowUpIcon';
@@ -24,11 +25,16 @@ function DetailContent() {
 
 	const dispatch = useDispatch();
 
+	// get slugId from router params
 	const { slugId } = useParams();
 
-	const { selectedData, loading, error: errorData } = useSelector((state) => state);
+	// use the following global states from redux
+	const { selectedData, loading, error: errorData } = useSelector(
+		(state) => state
+	);
 
 	useEffect(() => {
+		// call action `requestDetail` by `slugId`
 		dispatch(requestDetail(slugId));
 	}, [dispatch, slugId]);
 
@@ -57,9 +63,22 @@ function DetailContent() {
 			<div className='container'>
 				{selectedData !== null && (
 					<>
+						<Helmet>
+							<title>nanoTIA | {selectedData.seo.title}</title>
+							<meta
+								name='og:title'
+								property='og:title'
+								content={selectedData.seo.title}
+							></meta>
+							<meta name='description' content={selectedData.seo.description} />
+						</Helmet>
+
 						<div ref={startRef} />
 
-						<div className='jumbotron-fluid' style={{ padding: '5rem 1rem' }}>
+						<div
+							className='jumbotron-fluid'
+							style={{ padding: '5rem 1rem 1rem' }}
+						>
 							<div className='container'>
 								<h1 className='display-4'>
 									{React.createElement('div', {
@@ -79,6 +98,15 @@ function DetailContent() {
 								</p>
 							</div>
 						</div>
+
+						{selectedData.featured_image &&
+              selectedData.featured_image.source.length > 0 && (
+							<img
+								className='banner'
+								src={selectedData.featured_image.source}
+								alt={selectedData.featured_image.title}
+							/>
+						)}
 
 						{React.createElement('article', {
 							dangerouslySetInnerHTML: { __html: selectedData.content },
