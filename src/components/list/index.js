@@ -131,7 +131,10 @@ function ListContent() {
 											className='card-title'
 											role='button'
 											style={{ cursor: 'pointer' }}
-											onClick={() => history.push(`/${post.slug}`)}
+											onClick={() => {
+												dispatch(setScrollPosition(window.scrollY));
+												history.push(`/${post.slug}`);
+											}}
 										>
 											{React.createElement('div', {
 												dangerouslySetInnerHTML: { __html: post.title },

@@ -1,10 +1,15 @@
 import reducers, {
+	setScrollPosition,
 	requestList,
 	requestDetail,
 	succeedDetail,
 	failure,
 } from '.';
 
+function setScrollPositionAction (position) {
+	const state = reducers(undefined, {});
+	return reducers(state, setScrollPosition(position));
+}
 function requestListAction () {
 	const state = reducers(undefined, {});
 	return reducers(state, requestList());
@@ -28,6 +33,7 @@ describe('reducers', () => {
 			data: [],
 			totalPage: 0,
 			currentPage: 1,
+			scrollPosition: 0,
 			selectedData: null,
 			loading: false,
 			error: null,
@@ -35,12 +41,19 @@ describe('reducers', () => {
 	});
   
 	it('return correct actions', () => {
+		expect(setScrollPosition.toString()).toEqual('ACTIONS/SET_SCROLL_POSITION');
 		expect(requestList.toString()).toEqual('ACTIONS/REQUEST_LIST');
 		expect(requestDetail.toString()).toEqual('ACTIONS/REQUEST_DETAIL');
 		expect(succeedDetail.toString()).toEqual('ACTIONS/SUCCEED_DETAIL');
 		expect(failure.toString()).toEqual('ACTIONS/FAILURE');
 	});
-  
+	
+	it('call setScrollPosition action', () => {
+		expect(setScrollPositionAction(278)).toMatchObject({
+			scrollPosition: 278
+		});
+	});
+
 	it('call requestList action', () => {
 		expect(requestListAction()).toMatchObject({
 			data: [],
