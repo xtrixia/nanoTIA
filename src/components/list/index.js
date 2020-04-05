@@ -36,8 +36,11 @@ function ListContent() {
 	const [shouldUpdate, setShouldUpdate] = useState(false);
 
 	useEffect(() => {
-		dispatch(requestList());
-	}, [dispatch]);
+		if (data.length <= 0) {
+			dispatch(requestList());
+		}
+		window.scrollTo(0, scrollPosition);
+	}, []);
 
 	const convertDate = (timestamp) => {
 		const date = new Date(timestamp).toUTCString();
@@ -54,9 +57,9 @@ function ListContent() {
 		}
 	};
 
-	useEffect(() => {
-		window.scrollTo(0, scrollPosition);
-	}, [scrollPosition]);
+	// useEffect(() => {
+	// 	window.scrollTo(0, scrollPosition);
+	// }, [scrollPosition]);
 
 	useEffect(() => {
 		window.addEventListener('scroll', onScroll);
