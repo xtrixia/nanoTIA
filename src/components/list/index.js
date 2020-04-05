@@ -7,13 +7,15 @@
  * [x] API Endpoint: https://id.techinasia.com/wp-json/techinasia/3.0/categories/startups/posts?page=1&per_page=5
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet';
 
+import RefreshIcon from '../../assets/RefreshIcon';
 import ErrorIcon from '../../assets/ErrorIcon';
 
-import { requestList } from '../../reducers';
+import { requestList, setScrollPosition } from '../../reducers';
 
 import './list.css';
 
@@ -22,7 +24,16 @@ function ListContent() {
 
 	const dispatch = useDispatch();
 
-	const { data, loading, error: errorContent } = useSelector((state) => state);
+	const {
+		data,
+		scrollPosition,
+		totalPage,
+		currentPage,
+		loading,
+		error: errorContent,
+	} = useSelector((state) => state);
+
+	const [shouldUpdate, setShouldUpdate] = useState(false);
 
 	useEffect(() => {
 		dispatch(requestList());
@@ -33,7 +44,38 @@ function ListContent() {
 		return date;
 	};
 
-	if (loading) {
+	const onScroll = () => {
+		if (
+			window.scrollY > 0 &&
+      window.innerHeight + window.scrollY >=
+        window.document.body.offsetHeight * 0.9
+		) {
+			setShouldUpdate(true);
+		}
+	};
+
+	useEffect(() => {
+		window.scrollTo(0, scrollPosition);
+	}, [scrollPosition]);
+
+	useEffect(() => {
+		window.addEventListener('scroll', onScroll);
+		return () => {
+			window.removeEventListener('scroll', onScroll);
+		};
+	}, []);
+
+	useEffect(() => {
+		// check `shouldUpdate` and `currentPage`
+		if (!shouldUpdate || currentPage >= totalPage) return;
+
+		// actually fetching
+		dispatch(setScrollPosition(window.scrollY));
+		dispatch(requestList(currentPage + 1));
+		setShouldUpdate(false);
+	}, [shouldUpdate]);
+
+	if (loading && data.length === 0) {
 		return (
 			<div className='container' style={{ marginTop: '5rem' }}>
 				<p>Memuat . . .</p>
@@ -51,6 +93,19 @@ function ListContent() {
 
 	return (
 		<>
+			<Helmet>
+				<title>nanoTIA | Home</title>
+				<meta
+					name='og:title'
+					property='og:title'
+					content='nanoTIA | Home'
+				></meta>
+				<meta
+					name='description'
+					content='nanoTIA is a dummy Tech in Asia page'
+				/>
+			</Helmet>
+
 			<div className='container' style={{ marginTop: '5rem' }}>
 				<div className='cards'>
 					{data.length > 0 ? (
@@ -72,6 +127,7 @@ function ListContent() {
 
 									<div className='card-content'>
 										<h5
+											aria-label='button'
 											className='card-title'
 											role='button'
 											style={{ cursor: 'pointer' }}
@@ -96,7 +152,8 @@ function ListContent() {
 													</a>
 												) : (
 													post.author.display_name
-												)} - {convertDate(post.date)}
+												)}{' '}
+                        - {convertDate(post.date)}
 											</small>
 										</p>
 									</div>
@@ -104,32 +161,15 @@ function ListContent() {
 							</div>
 						))
 					) : (
-						<p>Belum ada saat ini</p>
+						<p>Belum ada data saat ini</p>
+					)}
+
+					{loading && data.length > 0 && (
+						<div className='refresh'>
+							<RefreshIcon />
+						</div>
 					)}
 				</div>
-
-				{/* <nav
-					aria-label='pagination'
-					style={{ marginTop: '3rem', marginBottom: '5rem' }}
-				>
-					<ul className='pagination justify-content-center'>
-						<li className='page-item disabled'>
-							<a className='page-link' href='#' aria-label='Previous'>
-								<span aria-hidden='true'>&laquo;</span>
-								<span className='sr-only'>Previous</span>
-							</a>
-						</li>
-						<li className='page-item disabled'>
-							<span className='page-link'>1</span>
-						</li>
-						<li className={`page-item ${posts.length !== 0 ? '' : 'disabled'}`}>
-							<a className='page-link' href='#' aria-label='Next'>
-								<span aria-hidden='true'>&raquo;</span>
-								<span className='sr-only'>Next</span>
-							</a>
-						</li>
-					</ul>
-				</nav> */}
 			</div>
 		</>
 	);

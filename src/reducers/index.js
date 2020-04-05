@@ -4,6 +4,7 @@ const initialState = {
 	data: [],
 	totalPage: 0,
 	currentPage: 1,
+	scrollPosition: 0,
 	selectedData: null,
 	loading: false,
 	error: null,
@@ -11,6 +12,7 @@ const initialState = {
 
 export const {
 	actions: {
+		setScrollPosition,
 		requestList,
 		requestDetail,
 		succeedList,
@@ -19,6 +21,7 @@ export const {
 	},
 } = createActions({
 	ACTIONS: {
+		SET_SCROLL_POSITION: (position) => position,
 		REQUEST_LIST: (url) => url,
 		REQUEST_DETAIL: (url) => url,
 		SUCCEED_LIST: (action) => action,
@@ -29,6 +32,10 @@ export const {
 
 export default handleActions(
 	{
+		[setScrollPosition]: (state, { payload: position }) => ({
+			...state,
+			scrollPosition: position,
+		}),
 		[requestDetail]: (state) => ({
 			...state,
 			loading: true,
