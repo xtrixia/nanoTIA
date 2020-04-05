@@ -29,5 +29,10 @@ div.card-body {
 
 div.card-content {
   display: grid;
+  text-align: left;
   padding: 0 1rem;
+}
+
+p.card-text {
+  align-self: center;
 }
