@@ -60,7 +60,7 @@ function DetailContent() {
 
 	return (
 		<>
-			<div className='container'>
+			<div className='container post'>
 				{selectedData !== null && (
 					<>
 						<Helmet>
@@ -68,7 +68,7 @@ function DetailContent() {
 							<meta
 								name='og:title'
 								property='og:title'
-								content={selectedData.seo.title}
+								content={`nanoTIA | ${selectedData.seo.title}`}
 							></meta>
 							<meta name='description' content={selectedData.seo.description} />
 						</Helmet>

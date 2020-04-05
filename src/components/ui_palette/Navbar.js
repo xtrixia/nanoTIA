@@ -11,7 +11,7 @@ function Navbar({ children }) {
 				</span>
 			</nav>
 
-			<div style={{ display: 'flex' }}>
+			<div style={{ display: 'flex', background: '#FAFAFA' }}>
 				{children}
 			</div>
 		</div>
